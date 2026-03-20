@@ -37,7 +37,9 @@
         <div class="bkash-pink p-5 pb-12 rounded-b-[40px] relative text-white">
             <div class="flex justify-between items-center mb-6">
                 <img src="https://www.logo.wine/a/logo/BKash/BKash-Icon-Logo.wine.svg" class="w-10 brightness-200">
-                <img src="https://i.ibb.co.com/rfwXpYjH/nafij.jpg" class="w-12 h-12 rounded-full border-2 border-white object-cover">
+                <div class="w-12 h-12 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center overflow-hidden">
+                    <i class="fa-solid fa-user text-2xl text-gray-400"></i>
+                </div>
             </div>
             <p class="text-sm opacity-90">আসসালামু আলাইকুম!</p>
             <h1 class="text-3xl font-bold mb-4 uppercase">NAFIJ</h1>
@@ -76,9 +78,33 @@
             </div>
         </div>
 
-        <!-- FIXED PERMANENT BANNER IMAGE -->
+        <!-- UPDATED PHOTO SOURCE -->
         <div class="p-4 mt-2">
-            <img src="https://i.ibb.co.com/6R68rZnt/Photo-Salami-thru-b-Kash.jpg" class="w-full rounded-xl shadow-md border border-gray-100" alt="Eid Salami Banner">
+            <img src="https://i.ibb.co.com/B24PYgt4/Photo-Salami-thru-b-Kash.jpg" class="w-full rounded-xl shadow-md border border-gray-100" alt="Photo Salami thru b Kash">
+        </div>
+    </div>
+
+    <!-- RECEIVER SCREEN -->
+    <div id="screen-receiver" class="app-screen">
+        <div class="bkash-pink p-4 text-white flex items-center gap-4">
+            <i class="fa-solid fa-arrow-left cursor-pointer" onclick="showScreen('screen-home')"></i>
+            <span class="font-medium">সালামি পাঠান</span>
+        </div>
+        <div class="p-6">
+            <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
+                <input type="number" id="input-phone" placeholder="বিকাশ নম্বর" class="w-full border rounded-lg px-4 py-3 outline-none font-semibold">
+                <input type="text" id="input-name" placeholder="আপনার নাম" class="w-full border rounded-lg px-4 py-3 outline-none font-semibold">
+                <select id="input-relation" class="w-full border rounded-lg px-4 py-3 outline-none font-semibold">
+                    <option value="">সম্পর্ক বাছাই করুন...</option>
+                    <option value="ছোট ভাই">ছোট ভাই</option>
+                    <option value="ছোট বোন">ছোট বোন</option>
+                    <option value="ভাগ্নে">ভাগ্নে</option>
+                    <option value="ভাগ্নি">ভাগ্নি</option>
+                    <option value="বন্ধু">বন্ধু</option>
+                    <option value="অন্যান্য">অন্যান্য</option>
+                </select>
+            </div>
+            <button onclick="showScreen('screen-pin')" class="w-full bkash-pink text-white py-4 rounded-xl mt-8 font-bold">পরবর্তী ধাপ</button>
         </div>
     </div>
 
@@ -108,55 +134,18 @@
         </div>
     </div>
 
-    <!-- RECEIVER SCREEN -->
-    <div id="screen-receiver" class="app-screen">
-        <div class="bkash-pink p-4 text-white flex items-center gap-4">
-            <i class="fa-solid fa-arrow-left cursor-pointer" onclick="showScreen('screen-home')"></i>
-            <span class="font-medium">সালামি পাঠান</span>
-        </div>
-        <div class="p-6">
-            <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                <input type="number" id="input-phone" placeholder="বিকাশ নম্বর" class="w-full border rounded-lg px-4 py-3 outline-none font-semibold">
-                <input type="text" id="input-name" placeholder="আপনার নাম" class="w-full border rounded-lg px-4 py-3 outline-none font-semibold">
-                <select id="input-relation" class="w-full border rounded-lg px-4 py-3 outline-none font-semibold">
-                    <option value="">সম্পর্ক বাছাই করুন...</option>
-                    <option value="ছোট ভাই">ছোট ভাই</option>
-                    <option value="ছোট বোন">ছোট বোন</option>
-                    <option value="ভাগ্নে">ভাগ্নে</option>
-                    <option value="ভাগ্নি">ভাগ্নি</option>
-                    <option value="চাচাতো ভাই/বোন">চাচাতো ভাই/বোন</option>
-                    <option value="মামাতো ভাই/বোন">মামাতো ভাই/বোন</option>
-                    <option value="বন্ধু">বন্ধু</option>
-                    <option value="সহকর্মী">সহকর্মী</option>
-                    <option value="প্রতিবেশী">প্রতিবেশী</option>
-                    <option value="ছাত্র/ছাত্রী">ছাত্র/ছাত্রী</option>
-                    <option value="অন্যান্য">অন্যান্য</option>
-                </select>
-            </div>
-            <button onclick="goToAmount()" class="w-full bkash-pink text-white py-4 rounded-xl mt-8 font-bold">পরবর্তী ধাপ</button>
-        </div>
-    </div>
-
     <script>
-        let transactions = JSON.parse(localStorage.getItem('nafij_history')) || [];
-
+        let pinCount = 0;
         function showScreen(id) {
             document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
-
         function toast(msg) {
             const t = document.getElementById("custom-toast");
             t.innerText = msg;
             t.className = "show";
             setTimeout(() => t.className = "", 3000);
         }
-
-        function goToAmount() {
-            showScreen('screen-pin');
-        }
-
-        let pinCount = 0;
         function tapPin() {
             const dots = document.querySelectorAll('.pin-dot');
             if(pinCount < 5) { dots[pinCount].classList.add('filled'); pinCount++; }
@@ -165,29 +154,20 @@
                 btn.style.opacity = "1"; btn.disabled = false;
             }
         }
-
         function resetPin() {
             pinCount = 0;
             document.querySelectorAll('.pin-dot').forEach(d => d.classList.remove('filled'));
             document.getElementById('pin-confirm-btn').disabled = true;
             document.getElementById('pin-confirm-btn').style.opacity = "0.3";
         }
-
         let holdTimer;
         const circle = document.querySelector('.progress-ring__circle');
         function startHold() {
             circle.style.strokeDashoffset = "0";
-            holdTimer = setTimeout(() => {
-                alert("সালামি সফল!");
-                location.reload();
-            }, 2000);
+            holdTimer = setTimeout(() => { alert("সালামি সফল!"); location.reload(); }, 2000);
         }
-
         function endHold() { clearTimeout(holdTimer); circle.style.strokeDashoffset = "238"; }
-
-        function showHistory() {
-            alert("হিস্ট্রি এখনো খালি!");
-        }
+        function showHistory() { toast('লেনদেন হিস্ট্রি খালি'); }
     </script>
 </body>
 </html>
