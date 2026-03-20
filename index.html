@@ -32,6 +32,7 @@
 
     <div id="custom-toast"></div>
 
+    <!-- HOME SCREEN -->
     <div id="screen-home" class="app-screen active">
         <div class="bkash-pink p-5 pb-12 rounded-b-[40px] relative text-white">
             <div class="flex justify-between items-center mb-6">
@@ -47,6 +48,7 @@
             <p class="text-[10px] mt-2 ml-4 opacity-80">সালামি ব্যালেন্স</p>
         </div>
 
+        <!-- 8 Grid Menu -->
         <div class="grid grid-cols-4 gap-y-6 gap-x-2 p-6 -mt-6 bg-white mx-4 rounded-2xl shadow-xl text-center text-[10px] font-bold text-gray-700">
             <div onclick="showScreen('screen-receiver')">
                 <div class="grid-icon-wrapper mx-auto mb-2 text-pink-500"><i class="fa-solid fa-paper-plane text-2xl"></i></div>সালামি পাঠান
@@ -74,11 +76,13 @@
             </div>
         </div>
 
-        <div class="p-4">
-            <img src="https://i.ibb.co/vz0q21rV/fz9-FYmc5.jpg" class="w-full rounded-xl shadow-sm border border-gray-100">
+        <!-- NEW IMAGE FROM IBB ADDED HERE -->
+        <div class="p-4 mt-2">
+            <img src="https://i.ibb.co.com/vz0q21rV/fz9-FYmc5.jpg" class="w-full rounded-xl shadow-md border border-gray-100" alt="Special Offer">
         </div>
     </div>
 
+    <!-- RECEIVER SCREEN -->
     <div id="screen-receiver" class="app-screen">
         <div class="bkash-pink p-4 text-white flex items-center gap-4">
             <i class="fa-solid fa-arrow-left cursor-pointer" onclick="showScreen('screen-home')"></i>
@@ -107,6 +111,7 @@
         </div>
     </div>
 
+    <!-- AMOUNT SCREEN -->
     <div id="screen-amount" class="app-screen">
         <div class="bkash-pink p-4 text-white flex items-center gap-4">
             <i class="fa-solid fa-arrow-left cursor-pointer" onclick="showScreen('screen-receiver')"></i>
@@ -123,7 +128,6 @@
                     <span class="text-3xl font-bold text-bkash">৳</span>
                     <input type="number" id="amount-val" value="10" class="text-5xl font-bold w-40 text-center outline-none">
                 </div>
-                
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="setVal(100)" class="border rounded-full py-2 font-bold text-gray-600">৳১০০</button>
                     <button onclick="setVal(500)" class="border rounded-full py-2 font-bold text-gray-600">৳৫০০</button>
@@ -131,21 +135,17 @@
                     <button onclick="setVal(10)" class="border rounded-full py-2 font-bold text-gray-600">৳১০</button>
                 </div>
             </div>
-            <button onclick="showScreen('screen-pin')" class="w-full bkash-pink text-white py-4 rounded-xl font-bold shadow-md">পরবর্তী ধাপ</button>
+            <button onclick="showScreen('screen-pin')" class="w-full bkash-pink text-white py-4 rounded-xl font-bold">পরবর্তী ধাপ</button>
         </div>
     </div>
 
+    <!-- PIN SCREEN -->
     <div id="screen-pin" class="app-screen">
         <div class="flex flex-col items-center pt-12 px-6">
-            <div class="w-16 h-16 bg-pink-50 rounded-full flex items-center justify-center mb-4">
-                <i class="fa-solid fa-lock text-yellow-500 text-2xl"></i>
-            </div>
+            <div class="w-16 h-16 bg-pink-50 rounded-full flex items-center justify-center mb-4"><i class="fa-solid fa-lock text-yellow-500 text-2xl"></i></div>
             <p class="font-bold text-gray-800 text-lg uppercase">NAFIJ ভাইয়ের সালামি PIN</p>
-            <p class="text-sm font-bold text-bkash mt-2">গোপন পিন: ৬৯৬৯৬ 😉</p>
-            
-            <div class="flex gap-4 my-8">
-                <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
-            </div>
+            <p class="text-xs font-bold text-bkash mt-2">গোপন পিন: ৬৯৬৯৬ 😉</p>
+            <div class="flex gap-4 my-8"><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div></div>
             
             <div class="grid grid-cols-3 gap-3 w-full mb-8">
                 <button class="numpad-btn" onclick="tapPin()">1</button><button class="numpad-btn" onclick="tapPin()">2</button><button class="numpad-btn" onclick="tapPin()">3</button>
@@ -158,15 +158,14 @@
             <div id="hold-section" class="hidden flex flex-col items-center space-y-4 pt-4 border-t w-full">
                 <p class="text-xs font-bold text-bkash">সালামি পাঠাতে ট্যাপ করে ধরে রাখুন</p>
                 <div id="hold-btn" onmousedown="startHold()" onmouseup="endHold()" ontouchstart="startHold()" ontouchend="endHold()">
-                    <svg class="progress-ring" width="93" height="93">
-                        <circle class="progress-ring__circle" stroke="#D12053" stroke-width="6" fill="transparent" r="42" cx="46" cy="46"/>
-                    </svg>
+                    <svg class="progress-ring" width="93" height="93"><circle class="progress-ring__circle" stroke="#D12053" stroke-width="6" fill="transparent" r="42" cx="46" cy="46"/></svg>
                     <img src="https://www.logo.wine/a/logo/BKash/BKash-Icon-Logo.wine.svg" class="w-10">
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- HISTORY SCREEN -->
     <div id="screen-history" class="app-screen">
         <div class="bkash-pink p-4 text-white flex items-center gap-4">
             <i class="fa-solid fa-arrow-left cursor-pointer" onclick="showScreen('screen-home')"></i>
@@ -175,6 +174,7 @@
         <div id="history-list" class="p-4 space-y-3"></div>
     </div>
 
+    <!-- SUCCESS SCREEN -->
     <div id="screen-success" class="app-screen bg-gray-50">
         <div class="bkash-pink p-12 text-center text-white rounded-b-[40px]">
             <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
