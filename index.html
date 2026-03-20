@@ -76,9 +76,9 @@
             </div>
         </div>
 
-        <!-- NEW IMAGE FROM IBB ADDED HERE -->
+        <!-- Banner Image -->
         <div class="p-4 mt-2">
-            <img src="https://i.ibb.co.com/vz0q21rV/fz9-FYmc5.jpg" class="w-full rounded-xl shadow-md border border-gray-100" alt="Special Offer">
+            <img src="https://i.ibb.co.com/B24PYgt4/Photo-Salami-thru-b-Kash.jpg" alt="Photo Salami thru b Kash" class="w-full rounded-xl shadow-md border border-gray-100">
         </div>
     </div>
 
@@ -90,7 +90,7 @@
         </div>
         <div class="p-6">
             <div class="bg-white border rounded-xl p-5 shadow-sm space-y-4">
-                <input type="number" id="input-phone" placeholder="বিকাশ নম্বর" class="w-full border rounded-lg px-4 py-3 outline-none font-semibold">
+                <input type="number" id="input-phone" placeholder="বিকাশ নম্বর (১১ সংখ্যা)" class="w-full border rounded-lg px-4 py-3 outline-none font-semibold">
                 <input type="text" id="input-name" placeholder="আপনার নাম" class="w-full border rounded-lg px-4 py-3 outline-none font-semibold">
                 <select id="input-relation" class="w-full border rounded-lg px-4 py-3 outline-none font-semibold">
                     <option value="">সম্পর্ক বাছাই করুন...</option>
@@ -98,12 +98,7 @@
                     <option value="ছোট বোন">ছোট বোন</option>
                     <option value="ভাগ্নে">ভাগ্নে</option>
                     <option value="ভাগ্নি">ভাগ্নি</option>
-                    <option value="চাচাতো ভাই/বোন">চাচাতো ভাই/বোন</option>
-                    <option value="মামাতো ভাই/বোন">মামাতো ভাই/বোন</option>
                     <option value="বন্ধু">বন্ধু</option>
-                    <option value="সহকর্মী">সহকর্মী</option>
-                    <option value="প্রতিবেশী">প্রতিবেশী</option>
-                    <option value="ছাত্র/ছাত্রী">ছাত্র/ছাত্রী</option>
                     <option value="অন্যান্য">অন্যান্য</option>
                 </select>
             </div>
@@ -126,7 +121,7 @@
                 <p class="text-sm font-bold text-gray-400 mb-4">সালামির পরিমাণ</p>
                 <div class="flex justify-center gap-2 mb-6">
                     <span class="text-3xl font-bold text-bkash">৳</span>
-                    <input type="number" id="amount-val" value="10" class="text-5xl font-bold w-40 text-center outline-none">
+                    <input type="number" id="amount-val" value="0" class="text-5xl font-bold w-40 text-center outline-none" readonly>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="setVal(100)" class="border rounded-full py-2 font-bold text-gray-600">৳১০০</button>
@@ -135,7 +130,7 @@
                     <button onclick="setVal(10)" class="border rounded-full py-2 font-bold text-gray-600">৳১০</button>
                 </div>
             </div>
-            <button onclick="showScreen('screen-pin')" class="w-full bkash-pink text-white py-4 rounded-xl font-bold">পরবর্তী ধাপ</button>
+            <button onclick="validateAmount()" class="w-full bkash-pink text-white py-4 rounded-xl font-bold">পরবর্তী ধাপ</button>
         </div>
     </div>
 
@@ -165,15 +160,6 @@
         </div>
     </div>
 
-    <!-- HISTORY SCREEN -->
-    <div id="screen-history" class="app-screen">
-        <div class="bkash-pink p-4 text-white flex items-center gap-4">
-            <i class="fa-solid fa-arrow-left cursor-pointer" onclick="showScreen('screen-home')"></i>
-            <span class="font-medium">লেনদেন হিস্ট্রি</span>
-        </div>
-        <div id="history-list" class="p-4 space-y-3"></div>
-    </div>
-
     <!-- SUCCESS SCREEN -->
     <div id="screen-success" class="app-screen bg-gray-50">
         <div class="bkash-pink p-12 text-center text-white rounded-b-[40px]">
@@ -190,6 +176,15 @@
             </div>
             <button onclick="location.reload()" class="w-full border-2 border-bkash text-bkash py-3 rounded-xl mt-6 font-bold">ফিরে যান</button>
         </div>
+    </div>
+
+    <!-- HISTORY SCREEN -->
+    <div id="screen-history" class="app-screen">
+        <div class="bkash-pink p-4 text-white flex items-center gap-4">
+            <i class="fa-solid fa-arrow-left cursor-pointer" onclick="showScreen('screen-home')"></i>
+            <span class="font-medium">লেনদেন হিস্ট্রি</span>
+        </div>
+        <div id="history-list" class="p-4 space-y-3"></div>
     </div>
 
     <script>
@@ -210,11 +205,28 @@
         function setVal(v) { document.getElementById('amount-val').value = v; }
 
         function goToAmount() {
-            const name = document.getElementById('input-name').value || "প্রাপক";
-            const phone = document.getElementById('input-phone').value || "01XXXXXXXXX";
+            const phone = document.getElementById('input-phone').value;
+            const name = document.getElementById('input-name').value;
+            const relation = document.getElementById('input-relation').value;
+
+            // MANDATORY CHECK
+            if (phone.length < 11 || name.trim() === "" || relation === "") {
+                toast("সবগুলো তথ্য সঠিকভাবে পূরণ করুন!");
+                return;
+            }
+
             document.getElementById('display-receiver-name').innerText = name;
             document.getElementById('display-receiver-phone').innerText = phone;
             showScreen('screen-amount');
+        }
+
+        function validateAmount() {
+            const amt = document.getElementById('amount-val').value;
+            if (amt <= 0) {
+                toast("সালামির পরিমাণ বাছাই করুন!");
+                return;
+            }
+            showScreen('screen-pin');
         }
 
         let pinCount = 0;
@@ -232,6 +244,7 @@
             document.querySelectorAll('.pin-dot').forEach(d => d.classList.remove('filled'));
             document.getElementById('pin-confirm-btn').disabled = true;
             document.getElementById('pin-confirm-btn').style.opacity = "0.3";
+            document.getElementById('hold-section').classList.add('hidden');
         }
 
         let holdTimer;
@@ -239,12 +252,14 @@
         function startHold() {
             circle.style.strokeDashoffset = "0";
             holdTimer = setTimeout(() => {
-                const name = document.getElementById('input-name').value || "প্রাপক";
-                const phone = document.getElementById('input-phone').value || "01800000000";
+                const name = document.getElementById('input-name').value;
+                const phone = document.getElementById('input-phone').value;
                 const amount = document.getElementById('amount-val').value;
                 const hiddenPhone = phone.substring(0, 3) + "******" + phone.slice(-2);
+                
                 transactions.unshift({ name, phone: hiddenPhone, amount, time: new Date().toLocaleTimeString() });
                 localStorage.setItem('nafij_history', JSON.stringify(transactions));
+                
                 document.getElementById('final-name').innerText = name;
                 document.getElementById('final-amount').innerText = "৳" + amount;
                 showScreen('screen-success');
@@ -255,7 +270,7 @@
 
         function showHistory() {
             const list = document.getElementById('history-list');
-            list.innerHTML = transactions.length ? '' : '<p class="text-center text-gray-400 mt-10">এখনো কোনো লেনদেন হয়নি</p>';
+            list.innerHTML = transactions.length ? '' : '<p class="text-center text-gray-400 mt-10">এখনো কোনো লেনদেন হয়নি</p>';
             transactions.forEach(t => {
                 list.innerHTML += `<div class="bg-white border-l-4 border-bkash p-4 rounded shadow-sm flex justify-between items-center mb-2"><div><p class="font-bold text-gray-800">${t.name}</p><p class="text-xs text-gray-500">${t.phone} • ${t.time}</p></div><p class="font-bold text-bkash">+৳${t.amount}</p></div>`;
             });
