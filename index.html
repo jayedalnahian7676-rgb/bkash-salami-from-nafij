@@ -12,17 +12,28 @@
         .text-bkash { color: #D12053; }
         .app-screen { display: none; min-height: 100vh; width: 100%; max-width: 450px; margin: 0 auto; background: white; position: relative; }
         .active { display: block; }
-        .grid-icon-wrapper { background: white; border-radius: 50%; width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .numpad-btn { background: #f8f9fa; border-radius: 12px; height: 65px; font-size: 1.5rem; font-weight: 600; color: #444; transition: active 0.1s; }
-        .numpad-btn:active { background: #e2e8f0; }
+        .grid-icon-wrapper { background: white; border-radius: 50%; width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); cursor: pointer; }
+        .numpad-btn { background: #f8f9fa; border-radius: 12px; height: 60px; font-size: 1.5rem; font-weight: 600; color: #444; }
         .pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #ddd; }
         .pin-dot.filled { background-color: #D12053; border-color: #D12053; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        
+        /* Custom Toast Message */
+        #custom-toast { visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 14px; }
+        #custom-toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+        /* Hold Button Animation */
+        #hold-btn { width: 80px; height: 80px; border-radius: 50%; border: 4px solid #fce7f3; display: flex; align-items: center; justify-content: center; background: white; position: relative; cursor: pointer; transition: transform 0.2s; }
+        #hold-btn:active { transform: scale(0.9); }
+        .progress-ring { position: absolute; top: -4px; left: -4px; transform: rotate(-90deg); }
+        .progress-ring__circle { stroke-dasharray: 238; stroke-dashoffset: 238; transition: stroke-dashoffset 2s linear; }
     </style>
 </head>
 <body>
 
-    <!-- SCREEN 1: HOME DASHBOARD -->
+    <div id="custom-toast">Message here</div>
+
     <div id="screen-home" class="app-screen active">
         <div class="bkash-pink p-5 pb-12 rounded-b-[40px] relative">
             <div class="flex justify-between items-center text-white mb-6">
@@ -30,34 +41,46 @@
                 <img src="https://i.ibb.co.com/rfwXpYjH/nafij.jpg" class="w-12 h-12 rounded-full border-2 border-white object-cover">
             </div>
             <p class="text-white text-sm opacity-90">আসসালামু আলাইকুম!</p>
-            <h1 class="text-white text-3xl font-bold mb-4 uppercase">EKRAM</h1>
+            <h1 class="text-white text-3xl font-bold mb-4 uppercase">NAFIJ</h1>
             <div class="bg-white rounded-full py-2 px-6 flex justify-between items-center w-64 shadow-lg">
-                <span class="text-bkash font-bold text-xl">৳ ৪,৯২,৭০,২২১</span>
+                <span class="text-bkash font-bold text-xl">৳ ৬,৯৬,৯৬৯</span>
                 <i class="fa-solid fa-eye text-gray-300"></i>
             </div>
             <p class="text-white text-[10px] mt-2 ml-4 opacity-80">সালামি ব্যালেন্স</p>
         </div>
 
-        <!-- 8 Icon Grid -->
         <div class="grid grid-cols-4 gap-y-6 gap-x-2 p-6 -mt-6 bg-white mx-4 rounded-2xl shadow-xl text-center text-[11px] font-bold text-gray-700">
-            <div onclick="showScreen('screen-receiver')" class="cursor-pointer">
-                <div class="grid-icon-wrapper mx-auto mb-2 text-green-500"><i class="fa-solid fa-money-bill-transfer text-2xl"></i></div>সালামি পাঠান
+            <div onclick="showScreen('screen-receiver')">
+                <div class="grid-icon-wrapper mx-auto mb-2 text-pink-500"><i class="fa-solid fa-paper-plane text-2xl"></i></div>সালামি পাঠান
             </div>
-            <div><div class="grid-icon-wrapper mx-auto mb-2 text-blue-500"><i class="fa-solid fa-mobile-screen-button text-2xl"></i></div>মোবাইল রিচার্জ</div>
-            <div><div class="grid-icon-wrapper mx-auto mb-2 text-orange-500"><i class="fa-solid fa-gift text-2xl"></i></div>ঈদ অফার</div>
-            <div><div class="grid-icon-wrapper mx-auto mb-2 text-indigo-500"><i class="fa-solid fa-file-invoice text-2xl"></i></div>লেনদেন হিস্ট্রি</div>
-            <div><div class="grid-icon-wrapper mx-auto mb-2 text-yellow-600"><i class="fa-solid fa-hand-holding-dollar text-2xl"></i></div>ক্যাশ আউট</div>
-            <div><div class="grid-icon-wrapper mx-auto mb-2 text-cyan-600"><i class="fa-solid fa-building-columns text-2xl"></i></div>অ্যাড মানি</div>
-            <div><div class="grid-icon-wrapper mx-auto mb-2 text-amber-500"><i class="fa-solid fa-lightbulb text-2xl"></i></div>পে বিল</div>
-            <div><div class="grid-icon-wrapper mx-auto mb-2 text-red-400"><i class="fa-solid fa-circle-question text-2xl"></i></div>হেল্প লাইন</div>
+            <div onclick="toast('সালামি নেন ভাই রিচার্জ না - মোবাইল রিচার্জ')">
+                <div class="grid-icon-wrapper mx-auto mb-2 text-blue-500"><i class="fa-solid fa-mobile-screen-button text-2xl"></i></div>মোবাইল রিচার্জ
+            </div>
+            <div onclick="toast('সালামি নেন, এটাই ঈদ অফার - ঈদ অফার')">
+                <div class="grid-icon-wrapper mx-auto mb-2 text-orange-500"><i class="fa-solid fa-gift text-2xl"></i></div>ঈদ অফার
+            </div>
+            <div onclick="showScreen('screen-home')">
+                <div class="grid-icon-wrapper mx-auto mb-2 text-indigo-500"><i class="fa-solid fa-file-invoice text-2xl"></i></div>লেনদেন হিস্ট্রি
+            </div>
+            <div onclick="toast('ক্যাশ আউট বন্ধ - ক্যাশ আউট')">
+                <div class="grid-icon-wrapper mx-auto mb-2 text-yellow-600"><i class="fa-solid fa-hand-holding-dollar text-2xl"></i></div>ক্যাশ আউট
+            </div>
+            <div onclick="toast('আমি আর কত এড করবো - অ্যাড মানি')">
+                <div class="grid-icon-wrapper mx-auto mb-2 text-cyan-600"><i class="fa-solid fa-building-columns text-2xl"></i></div>অ্যাড মানি
+            </div>
+            <div onclick="toast('বিলতো নাফিজ দিবে না - পে বিল')">
+                <div class="grid-icon-wrapper mx-auto mb-2 text-amber-500"><i class="fa-solid fa-lightbulb text-2xl"></i></div>পে বিল
+            </div>
+            <div onclick="toast('নাফিজ এখন বিজি আছে পরে কল দিয়েন')">
+                <div class="grid-icon-wrapper mx-auto mb-2 text-red-400"><i class="fa-solid fa-circle-question text-2xl"></i></div>হেল্প লাইন
+            </div>
         </div>
 
-        <!-- Promo Banner -->
         <div class="p-4 space-y-4">
             <div class="bg-pink-50 border border-pink-100 p-4 rounded-xl flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-pink-900">🌙 ঈদ মোবারক!</p>
-                    <p class="text-[10px] text-pink-700">"সালামি পাঠান" চাপুন এবং EKRAM ভাই থেকে সালামি নিন -></p>
+                    <p class="text-[10px] text-pink-700">নাফিজ থেকে সালামি নিতে "সালামি পাঠান" চাপুন!</p>
                 </div>
                 <i class="fa-solid fa-chevron-right text-pink-300"></i>
             </div>
@@ -65,7 +88,6 @@
         </div>
     </div>
 
-    <!-- SCREEN 2: RECEIVER INFO -->
     <div id="screen-receiver" class="app-screen">
         <div class="bkash-pink p-4 text-white flex items-center gap-4">
             <i class="fa-solid fa-arrow-left cursor-pointer" onclick="showScreen('screen-home')"></i>
@@ -73,136 +95,75 @@
         </div>
         <div class="p-6">
             <div class="bg-white border rounded-xl p-5 shadow-sm space-y-5">
-                <div>
-                    <label class="text-xs font-bold text-gray-500 block mb-2">বিকাশ নম্বর</label>
-                    <div class="flex border rounded-lg overflow-hidden">
-                        <div class="bg-gray-50 px-3 py-3 border-r flex items-center gap-2">
-                            <img src="https://flagcdn.com/w20/bd.png" class="w-5">
-                            <span class="text-sm font-bold">+880</span>
-                        </div>
-                        <input type="number" id="input-phone" placeholder="01XXXXXXXXX" class="w-full px-4 outline-none font-semibold">
-                    </div>
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-500 block mb-2">আপনার নাম</label>
-                    <input type="text" id="input-name" placeholder="আপনার নাম লিখুন..." class="w-full border rounded-lg px-4 py-3 outline-none font-semibold">
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-500 block mb-2">সম্পর্ক</label>
-                    <select id="input-relation" class="w-full border rounded-lg px-4 py-3 outline-none font-semibold text-gray-400">
-                        <option value="">সম্পর্ক বাছাই করুন...</option>
-                        <option value="ভাই">ভাই</option>
-                        <option value="বোন">বোন</option>
-                        <option value="বন্ধু">বন্ধু</option>
-                        <option value="ছোট ভাই">ছোট ভাই</option>
-                    </select>
-                </div>
+                <div><label class="text-xs font-bold text-gray-500 block mb-2">আপনার বিকাশ নম্বর</label><input type="number" id="input-phone" placeholder="01XXXXXXXXX" class="w-full border rounded-lg px-4 py-3 outline-none font-semibold"></div>
+                <div><label class="text-xs font-bold text-gray-500 block mb-2">আপনার নাম</label><input type="text" id="input-name" placeholder="নাম লিখুন" class="w-full border rounded-lg px-4 py-3 outline-none font-semibold"></div>
+                <div><label class="text-xs font-bold text-gray-500 block mb-2">সম্পর্ক</label><select id="input-relation" class="w-full border rounded-lg px-4 py-3 outline-none font-semibold"><option value="বন্ধু">বন্ধু</option><option value="ভাই">ভাই</option><option value="ছোট ভাই">ছোট ভাই</option></select></div>
             </div>
-            <button onclick="goToAmount()" class="w-full bkash-pink text-white py-4 rounded-xl mt-8 font-bold shadow-lg">পরবর্তী ধাপ &rarr;</button>
+            <button onclick="goToAmount()" class="w-full bkash-pink text-white py-4 rounded-xl mt-8 font-bold">পরবর্তী ধাপ</button>
         </div>
     </div>
 
-    <!-- SCREEN 3: AMOUNT SELECTION -->
     <div id="screen-amount" class="app-screen">
         <div class="bkash-pink p-4 text-white flex items-center gap-4">
             <i class="fa-solid fa-arrow-left cursor-pointer" onclick="showScreen('screen-receiver')"></i>
             <span class="font-medium">সালামি পাঠান</span>
         </div>
-        <div class="p-4">
-            <div class="bg-white border rounded-xl p-6 text-center shadow-sm">
-                <p class="text-[10px] text-gray-400 uppercase font-bold">প্রাপক</p>
-                <p id="display-receiver-name" class="font-bold text-gray-800 text-xl">NAME</p>
+        <div class="p-6 text-center">
+            <div class="bg-white border rounded-xl p-4 mb-4">
+                <p id="display-receiver-name" class="font-bold text-xl">NAME</p>
                 <p id="display-receiver-phone" class="text-gray-500 text-sm">01XXXXXXXXX</p>
-                <p id="display-receiver-relation" class="text-bkash text-xs font-bold mt-1">সম্পর্ক</p>
             </div>
-            
-            <div class="bg-white border rounded-xl p-6 mt-4 shadow-sm text-center">
-                <p class="font-bold text-gray-700 mb-6">সালামি পরিমাণ</p>
-                <div class="flex items-center justify-center gap-2 mb-2">
+            <div class="bg-white border rounded-xl p-8 mb-6">
+                <p class="text-sm font-bold text-gray-400 mb-4">সালামির পরিমাণ</p>
+                <div class="flex justify-center gap-2">
                     <span class="text-3xl font-bold text-bkash">৳</span>
-                    <input type="number" id="amount-val" value="0" class="text-5xl font-bold text-gray-800 w-48 text-center outline-none">
-                </div>
-                <p class="text-[10px] text-gray-400">সর্বোচ্চ সালামি: ৳১০,০০০</p>
-                
-                <div class="grid grid-cols-2 gap-3 mt-6">
-                    <button onclick="setAmount(100)" class="border rounded-full py-2 font-bold text-gray-600">৳১০০</button>
-                    <button onclick="setAmount(500)" class="border rounded-full py-2 font-bold text-gray-600">৳৫০০</button>
-                    <button onclick="setAmount(1000)" class="border rounded-full py-2 font-bold text-gray-600">৳১,০০০</button>
-                    <button onclick="setAmount(5000)" class="border rounded-full py-2 font-bold text-gray-600">৳৫,০০০</button>
+                    <input type="number" id="amount-val" value="500" class="text-5xl font-bold w-40 text-center outline-none">
                 </div>
             </div>
-
-            <div class="bg-white border rounded-lg p-4 mt-4">
-                <p class="text-gray-700 font-medium">ঈদ মোবারক!</p>
-            </div>
-
-            <button onclick="showScreen('screen-pin')" class="w-full bkash-pink text-white py-4 rounded-xl mt-6 font-bold shadow-lg">সালামি পাঠান &rarr;</button>
-            <p class="text-center text-[10px] text-gray-400 mt-4">ব্যালেন্স: ৳৪,৯২,৭০,২২১</p>
+            <button onclick="showScreen('screen-pin')" class="w-full bkash-pink text-white py-4 rounded-xl font-bold">পরবর্তী ধাপ</button>
         </div>
     </div>
 
-    <!-- SCREEN 4: PIN ENTRY -->
     <div id="screen-pin" class="app-screen">
         <div class="flex flex-col items-center pt-16 px-6">
-            <div class="w-20 h-20 bg-pink-50 rounded-full flex items-center justify-center mb-6">
-                <i class="fa-solid fa-lock text-yellow-500 text-3xl"></i>
-            </div>
-            <h2 class="font-bold text-gray-800 text-xl uppercase">EKRAM ভাইয়ের সালামি PIN</h2>
-            <p class="text-xs text-gray-400 mt-2">গোপন Pin Number 42069 😉</p>
+            <div class="w-16 h-16 bg-pink-50 rounded-full flex items-center justify-center mb-4"><i class="fa-solid fa-lock text-yellow-500 text-2xl"></i></div>
+            <p class="font-bold text-gray-800 text-lg">পিন দিন (Pin: 420)</p>
+            <div class="flex gap-4 my-8"><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div></div>
             
-            <div class="flex gap-5 my-10">
-                <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+            <div class="grid grid-cols-3 gap-3 w-full mb-8">
+                <button class="numpad-btn" onclick="tapPin()">1</button><button class="numpad-btn" onclick="tapPin()">2</button><button class="numpad-btn" onclick="tapPin()">3</button>
+                <button class="numpad-btn" onclick="tapPin()">4</button><button class="numpad-btn" onclick="tapPin()">5</button><button class="numpad-btn" onclick="tapPin()">6</button>
+                <button class="numpad-btn" onclick="tapPin()">7</button><button class="numpad-btn" onclick="tapPin()">8</button><button class="numpad-btn" onclick="tapPin()">9</button>
+                <button class="numpad-btn" onclick="resetPin()">C</button><button class="numpad-btn" onclick="tapPin()">0</button>
+                <button class="numpad-btn text-bkash" id="pin-confirm-btn" style="opacity: 0.3;" disabled onclick="showHold()"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
-            <div class="grid grid-cols-3 gap-4 w-full max-w-sm">
-                <button class="numpad-btn" onclick="tapPin()">1</button>
-                <button class="numpad-btn" onclick="tapPin()">2</button>
-                <button class="numpad-btn" onclick="tapPin()">3</button>
-                <button class="numpad-btn" onclick="tapPin()">4</button>
-                <button class="numpad-btn" onclick="tapPin()">5</button>
-                <button class="numpad-btn" onclick="tapPin()">6</button>
-                <button class="numpad-btn" onclick="tapPin()">7</button>
-                <button class="numpad-btn" onclick="tapPin()">8</button>
-                <button class="numpad-btn" onclick="tapPin()">9</button>
-                <div class="flex items-center justify-center"></div>
-                <button class="numpad-btn" onclick="tapPin()">0</button>
-                <button class="numpad-btn text-gray-400" onclick="resetPin()"><i class="fa-solid fa-delete-left"></i></button>
+            <div id="hold-section" class="hidden flex flex-col items-center space-y-4 pt-4 border-t w-full">
+                <p class="text-sm font-bold text-bkash">সালামি পাঠাতে ট্যাপ করে ধরে রাখুন</p>
+                <div id="hold-btn" onmousedown="startHold()" onmouseup="endHold()" ontouchstart="startHold()" ontouchend="endHold()">
+                    <svg class="progress-ring" width="88" height="88">
+                        <circle class="progress-ring__circle" stroke="#D12053" stroke-width="6" fill="transparent" r="38" cx="44" cy="44"/>
+                    </svg>
+                    <img src="https://www.logo.wine/a/logo/BKash/BKash-Icon-Logo.wine.svg" class="w-10">
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- SCREEN 5: SUCCESS -->
     <div id="screen-success" class="app-screen bg-gray-50">
-        <div class="bkash-pink p-12 text-center text-white">
+        <div class="bkash-pink p-12 text-center text-white rounded-b-[40px]">
             <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="fa-solid fa-check text-bkash text-4xl"></i>
             </div>
             <p class="text-xl font-bold">আপনার সালামি সফল হয়েছে</p>
         </div>
         <div class="p-6 -mt-6">
-            <div class="bg-white rounded-2xl shadow-xl p-6 space-y-4">
-                <div class="flex justify-between border-b pb-3">
-                    <span class="text-gray-400 text-sm font-bold">প্রাপক</span>
-                    <span id="final-name" class="font-black text-gray-800">NAME</span>
-                </div>
-                <div class="flex justify-between border-b pb-3">
-                    <span class="text-gray-400 text-sm font-bold">নম্বর</span>
-                    <span id="final-phone" class="font-bold text-bkash">01XXXXXXXXX</span>
-                </div>
-                <div class="flex justify-between border-b pb-3">
-                    <span class="text-gray-400 text-sm font-bold">পরিমাণ</span>
-                    <span id="final-amount" class="font-black text-gray-800">৳০</span>
-                </div>
-                <div class="flex justify-between border-b pb-3">
-                    <span class="text-gray-400 text-sm font-bold">সময়</span>
-                    <span class="font-medium text-xs text-gray-600" id="current-time"></span>
-                </div>
-                <div class="pt-4 text-center">
-                    <p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Transaction ID</p>
-                    <p class="font-black text-gray-700 text-lg">9K20M88F4L</p>
-                </div>
+            <div class="bg-white rounded-xl shadow-xl p-6 space-y-4">
+                <div class="flex justify-between border-b pb-2"><span class="text-gray-400">প্রাপক</span><span id="final-name" class="font-bold"></span></div>
+                <div class="flex justify-between border-b pb-2"><span class="text-gray-400">পরিমাণ</span><span id="final-amount" class="font-bold text-bkash"></span></div>
+                <div class="pt-4 text-center"><p class="text-xs text-gray-400 uppercase">Transaction ID</p><p class="font-bold">9K20M88F4L</p></div>
             </div>
-            <button onclick="location.reload()" class="w-full border-2 border-bkash text-bkash py-4 rounded-xl mt-8 font-black uppercase tracking-wider">আবার পাঠান</button>
+            <button onclick="location.reload()" class="w-full border-2 border-bkash text-bkash py-3 rounded-xl mt-6 font-bold uppercase">ফিরে যান</button>
         </div>
     </div>
 
@@ -210,27 +171,22 @@
         function showScreen(id) {
             document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            window.scrollTo(0, 0);
+        }
+
+        function toast(msg) {
+            const t = document.getElementById("custom-toast");
+            t.innerText = msg;
+            t.className = "show";
+            setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000);
         }
 
         function goToAmount() {
-            const name = document.getElementById('input-name').value || "Guest";
+            const name = document.getElementById('input-name').value || "প্রাপক";
             const phone = document.getElementById('input-phone').value || "01XXXXXXXXX";
-            const relation = document.getElementById('input-relation').value || "পরিবার";
-
             document.getElementById('display-receiver-name').innerText = name;
             document.getElementById('display-receiver-phone').innerText = phone;
-            document.getElementById('display-receiver-relation').innerText = relation;
-            
-            // Set final screen values too
             document.getElementById('final-name').innerText = name;
-            document.getElementById('final-phone').innerText = phone;
-
             showScreen('screen-amount');
-        }
-
-        function setAmount(val) {
-            document.getElementById('amount-val').value = val;
         }
 
         let pinCount = 0;
@@ -241,18 +197,37 @@
                 pinCount++;
             }
             if(pinCount === 5) {
-                setTimeout(() => {
-                    document.getElementById('final-amount').innerText = "৳" + document.getElementById('amount-val').value;
-                    document.getElementById('current-time').innerText = new Date().toLocaleString('bn-BD');
-                    showScreen('screen-success');
-                    resetPin();
-                }, 400);
+                const btn = document.getElementById('pin-confirm-btn');
+                btn.style.opacity = "1";
+                btn.disabled = false;
             }
         }
 
         function resetPin() {
             pinCount = 0;
             document.querySelectorAll('.pin-dot').forEach(d => d.classList.remove('filled'));
+            document.getElementById('pin-confirm-btn').disabled = true;
+            document.getElementById('pin-confirm-btn').style.opacity = "0.3";
+        }
+
+        function showHold() {
+            document.getElementById('hold-section').classList.remove('hidden');
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        let holdTimer;
+        const circle = document.querySelector('.progress-ring__circle');
+        function startHold() {
+            circle.style.strokeDashoffset = "0";
+            holdTimer = setTimeout(() => {
+                document.getElementById('final-amount').innerText = "৳" + document.getElementById('amount-val').value;
+                showScreen('screen-success');
+            }, 2000);
+        }
+
+        function endHold() {
+            clearTimeout(holdTimer);
+            circle.style.strokeDashoffset = "238";
         }
     </script>
 </body>
